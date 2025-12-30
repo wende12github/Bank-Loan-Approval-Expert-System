@@ -32,6 +32,22 @@ credit_score(c4, 720). income(c4, 30000). dti(c4, 20). unemployed(c4). age(c4, 2
 credit_score(c5, 680). income(c5, 55000). dti(c5, 45). employed(c5). age(c5, 35). loan_amount(c5, 25000).
 credit_score(c6, 710). income(c6, 52000). dti(c6, 28). employed(c6). age(c6, 19). loan_amount(c6, 20000).
 
+% Boundary/sample applicants used for testing
+% b1: credit_score = 700, DTI = 30, loan = 50% of income -> conditional by rules
+credit_score(b1,700). income(b1,60000). dti(b1,30). employed(b1). age(b1,30). loan_amount(b1,30000).
+
+% b2: credit_score = 600, DTI = 35 -> conditional
+credit_score(b2,600). income(b2,60000). dti(b2,35). employed(b2). age(b2,30). loan_amount(b2,20000).
+
+% b3: high credit score but DTI = 30 (boundary) -> expected unknown per implemented rules
+credit_score(b3,720). income(b3,60000). dti(b3,30). employed(b3). age(b3,40). loan_amount(b3,20000).
+
+% b4: high credit score but DTI = 40 (boundary) -> expected unknown per implemented rules
+credit_score(b4,720). income(b4,60000). dti(b4,40). employed(b4). age(b4,40). loan_amount(b4,20000).
+
+% b5: loan amount exactly 50% of income with otherwise good profile -> approve
+credit_score(b5,750). income(b5,60000). dti(b5,25). employed(b5). age(b5,35). loan_amount(b5,30000).
+
 % Employment helper: unify with one of the statuses
 employment_status(ID, employed) :- employed(ID).
 employment_status(ID, self_employed) :- self_employed(ID).

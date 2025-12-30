@@ -36,6 +36,32 @@ test(c6_explanation_too_young) :-
     assertion(Decision == reject),
     assertion(member(too_young, Reasons)).
 
+% Boundary tests
+test(boundary_cs_700_conditional) :-
+    % credit score = 700 should be considered conditional (600..700)
+    assertion(decide_loan(b1, conditional)),
+        assertion(decide_loan(b1, conditional)).
+
+test(boundary_cs_600_conditional) :-
+    % credit score = 600 should be conditional (lower borderline)
+    assertion(decide_loan(b2, conditional)),
+        assertion(decide_loan(b2, conditional)).
+
+test(boundary_dti_30_unknown_for_highscore) :-
+    % DTI = 30 with credit score >700 does not satisfy approve (needs DTI <30) and not conditional (score >700)
+    assertion(decide_loan(b3, unknown)),
+        assertion(decide_loan(b3, unknown)).
+
+test(boundary_dti_40_unknown_for_highscore) :-
+    % DTI = 40 with credit score >700 should not be rejected (reject >40) and not conditional (score >700) -> unknown
+    assertion(decide_loan(b4, unknown)),
+        assertion(decide_loan(b4, unknown)).
+
+test(boundary_loan_50pct_approve) :-
+    % Loan amount exactly 50% of income should be allowed (<= 50%) and with other approvals should approve
+    assertion(decide_loan(b5, approve)),
+        assertion(decide_loan(b5, approve)).
+
 :- end_tests(bank_loan).
 
 :- if(current_prolog_flag(argv, _)).
